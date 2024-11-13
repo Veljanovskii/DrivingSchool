@@ -1,5 +1,4 @@
 ﻿using DrivingSchool.Application.Data;
-using DrivingSchool.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -12,16 +11,12 @@ internal abstract class Repository<TKey, TEntity, TContext>(TContext dbContext, 
     protected TContext DbContext { get; } = dbContext;
     private readonly DbSet<TEntity> _entitySet = entitySet;
 
-    protected abstract TKey GetKey(TEntity entity);
-
     public virtual async Task<TEntity?> CreateAsync(TEntity entity, bool persist = true)
     {
         this.DbContext.Add(entity);
         if (persist)
         {
             await this.DbContext.SaveChangesAsync();
-            var id = this.GetKey(entity);
-            return await this.ReadAsync(id);
         }
         return entity;
     }

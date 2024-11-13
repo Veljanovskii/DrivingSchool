@@ -15,8 +15,4 @@
     <ProjectReference Include="..\..\Domain\DrivingSchool.Domain\DrivingSchool.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DataTransferObjects\Access\" />
-  </ItemGroup>
-
 </Project>

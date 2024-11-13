@@ -1,3 +1,4 @@
+using DrivingSchool.API.Middleware;
 using DrivingSchool.Application.Extensions;
 using DrivingSchool.Persistence.Extensions;
 
@@ -9,16 +10,14 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.RegisterDatabase(builder.Configuration);
 builder.Services.RegisterMediator(builder.Configuration);
 builder.Services.AddSwaggerGen();
+builder.MigrateDatabase();
 
 var app = builder.Build();
 
-app.MigrateDatabase();
+app.UseSwagger();
+app.UseSwaggerUI();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
 app.UseHttpsRedirection();
 
