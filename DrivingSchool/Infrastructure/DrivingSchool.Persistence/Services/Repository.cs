@@ -1,6 +1,6 @@
-﻿using DrivingSchool.Application.Data;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using DrivingSchool.Domain.Contracts;
 
 namespace DrivingSchool.Persistence.Services;
 

@@ -1,6 +1,6 @@
 ﻿using DrivingSchool.Domain.Entities;
 
-namespace DrivingSchool.Application.Data;
+namespace DrivingSchool.Domain.Contracts;
 
 public interface IUserRepository
     : IRepository<UserId, User>

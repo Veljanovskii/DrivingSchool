@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace DrivingSchool.Application.Data;
+namespace DrivingSchool.Domain.Contracts;
 
 public interface IRepository<TKey, TEntity>
 {

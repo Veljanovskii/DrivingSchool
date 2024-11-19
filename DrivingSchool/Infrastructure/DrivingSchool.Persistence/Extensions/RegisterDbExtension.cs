@@ -1,4 +1,4 @@
-﻿using DrivingSchool.Application.Data;
+﻿using DrivingSchool.Domain.Contracts;
 using DrivingSchool.Persistence.Context;
 using DrivingSchool.Persistence.Services;
 using Microsoft.EntityFrameworkCore;
