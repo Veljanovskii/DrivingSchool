@@ -12,4 +12,14 @@ public record AnswerOption
         Text = text;
         IsCorrect = isCorrect;
     }
+
+    public static AnswerOption Create(string text, bool isCorrect)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            throw new ArgumentException("Answer option text cannot be empty.");
+        }
+
+        return new AnswerOption(0, text, isCorrect);
+    }
 }

@@ -18,5 +18,6 @@ public static class RegisterDbExtension
         }, ServiceLifetime.Scoped);
 
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<ITestRepository, TestRepository>();
     }
 }

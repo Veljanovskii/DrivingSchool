@@ -1,4 +1,6 @@
-﻿using DrivingSchool.Application.DataTransferObjects.CreateTest;
+﻿using System.Net;
+using DrivingSchool.Application.DataTransferObjects.CreateTest;
+using DrivingSchool.Application.Exceptions;
 using DrivingSchool.Domain.Contracts;
 using DrivingSchool.Domain.Entities;
 using MediatR;
@@ -14,16 +16,29 @@ public class CreateTestCommandHandler(ITestRepository testRepository)
 
     public async Task<CreateTestResponse> Handle(CreateTestCommand request, CancellationToken cancellationToken)
     {
+        if (!string.Equals(request.CreateTestRequest.UserType, "Moderator", StringComparison.OrdinalIgnoreCase))
+        {
+            throw new HttpException( HttpStatusCode.Forbidden, "Only moderators can create tests.");
+        }
+
         var test = Test.Create(request.CreateTestRequest.Title, request.CreateTestRequest.DurationInMinutes);
 
         foreach (var questionDto in request.CreateTestRequest.Questions)
         {
             var question = Question.Create(
                 questionDto.Text,
-                questionDto.Options,
-                questionDto.CorrectOptionIndexes,
                 questionDto.ImageUrl
             );
+
+            foreach (var option in questionDto.Options)
+            {
+                var answerOption = AnswerOption.Create(
+                    option.Text,
+                    option.IsCorrect
+                );
+
+                question.AddAnswerOption(answerOption);
+            }
 
             test.AddQuestion(question);
         }
