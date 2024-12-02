@@ -9,19 +9,22 @@ namespace DrivingSchool.Application.Features.CreateTest;
 
 public record CreateTestCommand(CreateTestRequest CreateTestRequest) : IRequest<CreateTestResponse>;
 
-public class CreateTestCommandHandler(ITestRepository testRepository)
+public class CreateTestCommandHandler(ITestRepository testRepository,
+    IUserRepository userRepository)
     : IRequestHandler<CreateTestCommand, CreateTestResponse>
 {
     private readonly ITestRepository _testRepository = testRepository;
+    private readonly IUserRepository _userRepository = userRepository;
 
     public async Task<CreateTestResponse> Handle(CreateTestCommand request, CancellationToken cancellationToken)
     {
-        if (!string.Equals(request.CreateTestRequest.UserType, "Moderator", StringComparison.OrdinalIgnoreCase))
+        User? user = await _userRepository.ReadAsync(new UserId(request.CreateTestRequest.UserId));
+        if (user == null)
         {
-            throw new HttpException( HttpStatusCode.Forbidden, "Only moderators can create tests.");
+            throw new HttpException(HttpStatusCode.NotFound, "User not found.");
         }
 
-        var test = Test.Create(request.CreateTestRequest.Title, request.CreateTestRequest.DurationInMinutes);
+        var test = Test.Create(user, request.CreateTestRequest.Title, request.CreateTestRequest.DurationInMinutes);
 
         foreach (var questionDto in request.CreateTestRequest.Questions)
         {

@@ -6,12 +6,6 @@ using Microsoft.EntityFrameworkCore;
 namespace DrivingSchool.Persistence.Services;
 
 internal class TestRepository(DrivingSchoolDbContext dbContext)
-    : Repository<Guid, Test, DrivingSchoolDbContext>(dbContext, dbContext.Tests), ITestRepository
+    : Repository<TestId, Test, DrivingSchoolDbContext>(dbContext, dbContext.Tests), ITestRepository
 {
-    public async Task<List<Test>> GetAllTestsWithQuestionsAsync()
-    {
-        return await Read(_ => true)
-            .Include(t => t.Questions)
-            .ToListAsync();
-    }
 }

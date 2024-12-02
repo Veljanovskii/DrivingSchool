@@ -5,20 +5,27 @@ public record QuestionId(Guid Value);
 public record Question
 {
     public QuestionId Id { get; private init; }
-    public string Text { get; private init; }
-    public string? ImageUrl { get; private init; }
-    public List<AnswerOption> AnswerOptions { get; private init; } = new();
+    public string Text { get; private set; }
+    public string? ImageUrl { get; private set; }
+    public List<AnswerOption> AnswerOptions { get; private set; } = new();
+    public int PointValue { get; private set; }
 
-    private Question(QuestionId id, string text, string? imageUrl)
+    private Question(QuestionId id, string text, string? imageUrl, int pointValue)
     {
         Id = id;
         Text = text;
         ImageUrl = imageUrl;
+        PointValue = pointValue;
     }
 
-    public static Question Create(string text, string? imageUrl = null)
+    public static Question Create(string text, string? imageUrl, int pointValue)
     {
-        return new Question(new QuestionId(Guid.NewGuid()), text, imageUrl);
+        if (pointValue < 1 || pointValue > 3)
+        {
+            throw new ArgumentOutOfRangeException(nameof(pointValue), "PointValue must be between 1 and 3.");
+        }
+
+        return new Question(new QuestionId(Guid.NewGuid()), text, imageUrl, pointValue);
     }
 
     public void AddAnswerOption(AnswerOption answerOption)
@@ -28,5 +35,11 @@ public record Question
             throw new InvalidOperationException("Question cannot have more than 6 answer options.");
         }
         AnswerOptions.Add(answerOption);
+    }
+
+    public void UpdateTextAndImage(string text, string? imageUrl)
+    {
+        Text = text;
+        ImageUrl = imageUrl;
     }
 }

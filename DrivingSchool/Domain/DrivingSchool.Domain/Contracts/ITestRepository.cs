@@ -2,7 +2,6 @@
 
 namespace DrivingSchool.Domain.Contracts;
 
-public interface ITestRepository : IRepository<Guid, Test>
+public interface ITestRepository : IRepository<TestId, Test>
 {
-    Task<List<Test>> GetAllTestsWithQuestionsAsync();
 }
