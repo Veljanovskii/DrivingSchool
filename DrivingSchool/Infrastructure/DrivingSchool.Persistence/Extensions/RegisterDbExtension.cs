@@ -19,5 +19,6 @@ public static class RegisterDbExtension
 
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ITestRepository, TestRepository>();
+        services.AddScoped<ITestResultRepository, TestResultRepository>();
     }
 }

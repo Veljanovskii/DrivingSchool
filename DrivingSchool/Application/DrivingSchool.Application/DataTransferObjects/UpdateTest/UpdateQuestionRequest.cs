@@ -6,4 +6,5 @@ public class UpdateQuestionRequest
     public string Text { get; set; } = string.Empty;
     public string? ImageUrl { get; set; }
     public List<UpdateAnswerOptionRequest> Options { get; set; } = new();
+    public int PointValue { get; set; }
 }

@@ -30,7 +30,8 @@ public class CreateTestCommandHandler(ITestRepository testRepository,
         {
             var question = Question.Create(
                 questionDto.Text,
-                questionDto.ImageUrl
+                questionDto.ImageUrl,
+                questionDto.PointValue
             );
 
             foreach (var option in questionDto.Options)

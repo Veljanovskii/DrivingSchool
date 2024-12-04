@@ -27,8 +27,4 @@
     <ProjectReference Include="..\..\Domain\DrivingSchool.Domain\DrivingSchool.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-
 </Project>

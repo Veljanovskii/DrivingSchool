@@ -37,7 +37,11 @@ public class UpdateTestCommandHandler(ITestRepository testRepository,
             var question = test.Questions.FirstOrDefault(q => q.Id.Value == questionRequest.Id);
             if (question == null)
             {
-                question = Question.Create(questionRequest.Text, questionRequest.ImageUrl);
+                question = Question.Create(
+                    questionRequest.Text,
+                    questionRequest.ImageUrl,
+                    questionRequest.PointValue
+                );
                 test.AddQuestion(question);
             }
             else

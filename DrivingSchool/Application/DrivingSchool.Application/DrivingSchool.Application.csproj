@@ -17,4 +17,9 @@
     <ProjectReference Include="..\..\Domain\DrivingSchool.Domain\DrivingSchool.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\SubmitTest\" />
+    <Folder Include="Features\StartTest\" />
+  </ItemGroup>
+
 </Project>
