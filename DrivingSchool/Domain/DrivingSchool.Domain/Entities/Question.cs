@@ -25,6 +25,11 @@ public record Question
             throw new ArgumentOutOfRangeException(nameof(pointValue), "PointValue must be between 1 and 3.");
         }
 
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            throw new ArgumentException("Question text cannot be empty.");
+        }
+
         return new Question(new QuestionId(Guid.NewGuid()), text, imageUrl, pointValue);
     }
 
@@ -39,6 +44,11 @@ public record Question
 
     public void UpdateTextAndImage(string text, string? imageUrl)
     {
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            throw new ArgumentException("Question text cannot be empty.");
+        }
+
         Text = text;
         ImageUrl = imageUrl;
     }

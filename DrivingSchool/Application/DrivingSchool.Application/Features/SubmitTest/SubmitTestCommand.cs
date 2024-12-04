@@ -24,33 +24,45 @@ public class SubmitTestCommandHandler(ITestRepository testRepository,
             throw new HttpException(HttpStatusCode.NotFound, "Test result not found.");
         }
 
-        var test = await _testRepository.ReadWithQuestionsAsync(new TestId(testResult.TestId.Value));
+        var test = await _testRepository.ReadWithQuestionsAsync(testResult.TestId);
         if (test == null)
         {
             throw new HttpException(HttpStatusCode.NotFound, "Test not found.");
         }
 
         int totalScore = 0;
+        var questionScores = new List<QuestionScoreDto>();
 
         foreach (var answer in request.Request.Answers)
         {
             var question = test.Questions.FirstOrDefault(q => q.Id.Value == answer.QuestionId);
             if (question == null)
             {
-                throw new HttpException(HttpStatusCode.NotFound, $"Question with ID {answer.QuestionId} not found.");
+                throw new HttpException(HttpStatusCode.BadRequest, $"Invalid question ID: {answer.QuestionId}");
             }
 
-            var correctOptions = question.AnswerOptions.Where(o => o.IsCorrect).Select(o => o.Id).ToList();
-            if (!correctOptions.Except(answer.SelectedOptionIds).Any() &&
-                !answer.SelectedOptionIds.Except(correctOptions).Any())
+            bool isCorrect = question.AnswerOptions
+                                 .Where(o => o.IsCorrect)
+                                 .All(o => answer.SelectedOptionIds.Contains(o.Id)) &&
+                             answer.SelectedOptionIds.All(id => question.AnswerOptions.Any(o => o.Id == id && o.IsCorrect));
+
+            int pointsEarned = isCorrect ? question.PointValue : 0;
+            totalScore += pointsEarned;
+
+            questionScores.Add(new QuestionScoreDto
             {
-                totalScore += question.PointValue;
-            }
+                QuestionId = question.Id.Value,
+                PointsEarned = pointsEarned
+            });
         }
 
         testResult.UpdateScore(totalScore);
         await _testResultRepository.UpdateAsync(testResult);
 
-        return new SubmitTestResponse { TotalScore = totalScore };
+        return new SubmitTestResponse
+        {
+            TotalScore = totalScore,
+            QuestionScores = questionScores
+        };
     }
 }

@@ -19,16 +19,15 @@ public class TestResultConfiguration : IEntityTypeConfiguration<TestResult>
 
         builder.Property(x => x.CandidateId)
             .HasConversion(
-                id => id.Value, // Convert UserId to its raw Guid value
-                value => new UserId(value) // Convert Guid back to UserId
+                id => id.Value,
+                value => new UserId(value)
             )
             .IsRequired();
 
         builder.Property(x => x.Score).IsRequired();
         builder.Property(x => x.TakenAt).IsRequired();
 
-        // Optional: Set up a relationship with Candidate/User if needed
-        builder.HasOne<Candidate>() // Assuming TestResult has a relationship with Candidate
+        builder.HasOne<Candidate>()
             .WithMany(c => c.TestResults)
             .HasForeignKey(x => x.CandidateId)
             .OnDelete(DeleteBehavior.Cascade);

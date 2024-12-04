@@ -18,7 +18,7 @@ public class UpdateTestCommandHandler(ITestRepository testRepository,
 
     public async Task<UpdateTestResponse> Handle(UpdateTestCommand request, CancellationToken cancellationToken)
     {
-        var test = await _testRepository.ReadAsync(new TestId(request.UpdateTestRequest.TestId));
+        var test = await _testRepository.ReadWithQuestionsAsync(new TestId(request.UpdateTestRequest.TestId));
         if (test == null)
         {
             throw new HttpException(HttpStatusCode.NotFound, "Test not found.");
